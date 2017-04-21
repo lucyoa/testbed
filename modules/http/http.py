@@ -9,6 +9,10 @@ PORT_NUMBER = 8080
 
 class HttpRequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     def do_GET(self):
+        print(self.path)
+        scenarios.scenarios[self.server.scenario](self)
+    def do_POST(self):
+        print(self.path)
         scenarios.scenarios[self.server.scenario](self)
 
 
@@ -16,7 +20,9 @@ class HttpServer(BaseHTTPServer.HTTPServer):
     def serve_forever(self, scenario):
         self.scenario = scenario
         self.stop = False
-        self.handle_request()
+
+        while self.stop == False:
+            self.handle_request()
 
 
 class Http(object):
